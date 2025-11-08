@@ -392,6 +392,12 @@ class Either(Generic[L, R]):
             ]
         )
 
+    def flat_map[T1, T2](
+        self: Either[L, Iterable[T1]],
+        f: Callable[[T1], Iterable[T2]],
+    ) -> Either[L, Iterable[T2]]:
+        return self._apply_right(lambda it: (y for x in it for y in f(x)))
+
     def to_list[T1](self: Either[L, Iterable[T1]]) -> Either[L, list[T1]]:
         return self._apply_right(list)
 
@@ -740,7 +746,7 @@ class Either(Generic[L, R]):
         if self.is_right(self._right):  #  type: ignore
             try:
                 with open(fp, "w") as f:
-                    f.write(self._right.model_dump_json(indent=4)) # type: ignore
+                    f.write(self._right.model_dump_json(indent=4))  # type: ignore
                 return self
             except OSError as e:
                 warnings.warn(
@@ -857,7 +863,7 @@ def throws[T, *E1s, *E2s, **Ps](
     -------
     `Callable[[*E2s, *Ps], Callable[Ps, Either[Union[*E1s, *E2s], T]]]`
         A wrapped function that catches specified exceptions and returns them as Either.Left.
-        
+
     Example
     -------
     >>> @throws(ValueError, KeyError)
@@ -896,6 +902,7 @@ def throws[T, *E1s, *E2s, **Ps](
         return wrapper
 
     return decorator
+
 
 def wrap_external[T, *Ts, **Ps](
     func: Callable[Ps, T], *exception_types: *Ts
