@@ -1,5 +1,5 @@
 [project]
-name = "effect-py"
+name = "fn-effect-py"
 version = "0.1.0"
 description = ""
 readme = "README.md"
