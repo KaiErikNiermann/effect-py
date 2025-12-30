@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/effect-py
+      url: https://pypi.org/p/fn-effect-py
     permissions:
       id-token: write  # Required for trusted publishing
 
